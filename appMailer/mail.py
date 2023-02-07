@@ -2,8 +2,8 @@ from flask import(
     Blueprint, render_template, request, flash, url_for, redirect, current_app
 )
 
-#import sendgrid
-#from sendgrid.helpers.mail import Mail, Email, To, Content
+import sendgrid
+from sendgrid.helpers.mail import Mail, Email, To, Content
 
 from appMailer.db import get_db
 
@@ -52,11 +52,10 @@ def create():
     return render_template('mails/create.html')
 
 
-"""def send(to, subject, content):
+def send(to, subject, content):
     sg = sendgrid.SendGridAPIClient(api_key=current_app.config['SENDGRID_API_KEY'])
     from_email = Email(current_app.config['FROM_EMAIL'])
     to_email = To(to)
     content = Content('text/plain', content)
     mail = Mail(from_email, to_email, subject, content)
     response = sg.client.mail.send.past(request_body = mail.get())
-"""
