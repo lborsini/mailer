@@ -2,8 +2,10 @@ from flask import(
     Blueprint, render_template, request, flash, url_for, redirect, current_app
 )
 
+
 import sendgrid
-from sendgrid.helpers.mail import Mail, Email, To, Content
+from sendgrid.helpers.mail import *
+
 
 from appMailer.db import get_db
 
@@ -39,7 +41,7 @@ def create():
             campo.append('Content is required!')
 
         if len(campo) == 0:
-            #send(email, subject, content)
+            send(email, subject, content)
             db, c = get_db()
             c.execute("INSERT INTO email (email, subject, content) VALUES (%s, %s, %s)", (email, subject, content))
             db.commit()
@@ -53,9 +55,9 @@ def create():
 
 
 def send(to, subject, content):
-    sg = sendgrid.SendGridAPIClient(api_key=current_app.config['SENDGRID_API_KEY'])
+    sg = sendgrid.SendGridAPIClient(api_key=current_app.config['SENDGRID_KEY'])
     from_email = Email(current_app.config['FROM_EMAIL'])
     to_email = To(to)
     content = Content('text/plain', content)
     mail = Mail(from_email, to_email, subject, content)
-    response = sg.client.mail.send.past(request_body = mail.get())
+    response = sg.client.mail.send.post(request_body=mail.get())
